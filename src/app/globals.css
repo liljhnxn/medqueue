@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #101820;
+  --card: #1B2730;
+  --border: #30414B;
+  --teal-accent: #45C4B0;
+  --main-text: #E8EEF2;
+  --secondary-text: #9BAAB4;
+  --success-green: #79C9A5;
+  --error-red: #E27D7D;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--main-text);
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar for hospital dashboard */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #101820;
+}
+::-webkit-scrollbar-thumb {
+  background: #30414B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #45C4B0;
+}
