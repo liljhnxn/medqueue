@@ -1,4 +1,4 @@
-export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "") as `0x${string}`;
+export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x466c68d08716e6127d796E16a99BAe840721fAb6") as `0x${string}`;
 
 export const MED_QUEUE_ABI = [
   {

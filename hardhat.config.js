@@ -5,7 +5,7 @@ require("dotenv").config({ path: ".env.local" });
 const BOTCHAIN_RPC_URL =
   process.env.BOTCHAIN_RPC_URL ||
   process.env.NEXT_PUBLIC_BOTCHAIN_RPC_URL ||
-  "https://rpc.bohr.life";
+  "https://rpc.botchain.ai";
 
 let privateKey = process.env.PRIVATE_KEY ? process.env.PRIVATE_KEY.trim() : "";
 if (privateKey && !privateKey.startsWith("0x") && privateKey.length === 64) {
@@ -33,23 +33,23 @@ module.exports = {
       url: "http://127.0.0.1:8545",
       chainId: 31337,
     },
-    botchainTestnet: {
+    botchainMainnet: {
       url: BOTCHAIN_RPC_URL,
-      chainId: 968,
+      chainId: 677,
       accounts: accounts,
     },
   },
   etherscan: {
     apiKey: {
-      botchainTestnet: "any",
+      botchainMainnet: "any",
     },
     customChains: [
       {
-        network: "botchainTestnet",
-        chainId: 968,
+        network: "botchainMainnet",
+        chainId: 677,
         urls: {
-          apiURL: "https://scan.bohr.life/api",
-          browserURL: "https://scan.bohr.life",
+          apiURL: "https://scan.botchain.ai/api",
+          browserURL: "https://scan.botchain.ai",
         },
       },
     ],

@@ -19,13 +19,32 @@ async function main() {
   const balance = await hre.ethers.provider.getBalance(deployer.address);
   console.log(`Deployer balance: ${hre.ethers.formatEther(balance)} BOT`);
 
+  const feeData = await hre.ethers.provider.getFeeData();
+  const gasPrice = feeData.gasPrice || 20000000000n;
+  console.log(`Current gas price: ${hre.ethers.formatUnits(gasPrice, "gwei")} Gwei`);
+
   console.log("\nDeploying MedQueue contract...");
   const MedQueue = await hre.ethers.getContractFactory("MedQueue");
+  
+  // Deploy without inflated gas settings to keep fees as low as possible
   const medQueue = await MedQueue.deploy();
 
   await medQueue.waitForDeployment();
   const contractAddress = await medQueue.getAddress();
   const deployTx = medQueue.deploymentTransaction();
+
+  let gasUsedStr = "N/A";
+  let totalCostStr = "N/A";
+  if (deployTx) {
+    const receipt = await deployTx.wait();
+    if (receipt) {
+      gasUsedStr = receipt.gasUsed.toString();
+      const totalCost = receipt.gasUsed * receipt.gasPrice;
+      totalCostStr = `${hre.ethers.formatEther(totalCost)} BOT`;
+    }
+  }
+
+  const explorerBase = "https://scan.botchain.ai";
 
   console.log("=================================================");
   console.log(" CONTRACT DEPLOYED SUCCESSFULLY!");
@@ -34,11 +53,13 @@ async function main() {
   if (deployTx) {
     console.log(`Deployment Tx Hash: ${deployTx.hash}`);
   }
-  console.log(`Explorer Link: https://scan.bohr.life/address/${contractAddress}`);
+  console.log(`Gas Used: ${gasUsedStr}`);
+  console.log(`Total Gas Cost: ${totalCostStr}`);
+  console.log(`Explorer Link: ${explorerBase}/address/${contractAddress}`);
   console.log("=================================================");
   console.log("\nNEXT STEPS:");
   console.log("1. Copy the contract address above.");
-  console.log("2. Open your .env.local file.");
+  console.log("2. Open your .env and .env.local files.");
   console.log(`3. Set NEXT_PUBLIC_CONTRACT_ADDRESS=${contractAddress}`);
   console.log("4. Restart your Next.js dev server (npm run dev) to apply changes.");
   console.log("=================================================\n");

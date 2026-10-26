@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 /**
  * @title MedQueue
- * @dev A simple, lightweight hospital queue registration demo running on Botchain Testnet.
+ * @dev A simple, lightweight hospital queue registration demo running on Botchain Mainnet.
  * Assigns sequential queue numbers starting from 1 to registering wallets.
  * No medical or personal data is collected or stored.
  */

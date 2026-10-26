@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from "wagmi";
-import { botchainTestnet } from "@/config/chain";
-import { Activity, Wallet, ChevronDown, LogOut, RefreshCw, AlertCircle, CheckCircle2 } from "lucide-react";
+import { botchainMainnet } from "@/config/chain";
+import { Wallet, ChevronDown, LogOut, AlertCircle, ExternalLink } from "lucide-react";
 
 export function Navbar() {
   const { address, isConnected } = useAccount();
@@ -13,7 +13,7 @@ export function Navbar() {
   const { switchChain, isPending: isSwitching } = useSwitchChain();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const isWrongNetwork = isConnected && chainId !== botchainTestnet.id;
+  const isWrongNetwork = isConnected && chainId !== botchainMainnet.id;
 
   const formatAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -39,27 +39,61 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Network and Wallet Controls */}
+        {/* Network, Ecosystem Links and Wallet Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Botchain Testnet indicator */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1B2730] border border-border text-xs text-secondaryText">
-            <span
-              className={`w-2 h-2 rounded-full ${
-                isConnected && !isWrongNetwork ? "bg-tealAccent animate-pulse" : "bg-tealAccent/70"
-              }`}
+          {/* BOT Chain Website Nav Link with Logo at Front */}
+          <a
+            href="https://botchain.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-secondaryText hover:text-mainText hover:bg-[#1B2730] transition-colors"
+            title="BOT Chain Official Website"
+          >
+            <img
+              src="/botchain-logo.png"
+              alt="BOT Chain Logo"
+              className="w-3.5 h-3.5 object-contain rounded shrink-0"
             />
-            <span className="font-medium text-mainText">Botchain Testnet</span>
+            <span>BOT Chain</span>
+            <ExternalLink className="w-3 h-3 text-secondaryText" />
+          </a>
+
+          {/* Mainnet Explorer Direct Nav Link with Logo at Front */}
+          <a
+            href="https://scan.botchain.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-secondaryText hover:text-mainText hover:bg-[#1B2730] transition-colors"
+            title="Open BOT Chain Explorer"
+          >
+            <img
+              src="/botchain-logo.png"
+              alt="BOT Chain Logo"
+              className="w-3.5 h-3.5 object-contain rounded shrink-0"
+            />
+            <span>Explorer</span>
+            <ExternalLink className="w-3 h-3 text-secondaryText" />
+          </a>
+
+          {/* Botchain Mainnet Indicator */}
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1B2730] border border-border text-xs text-secondaryText">
+            <img
+              src="/botchain-logo.png"
+              alt="BOT Chain Logo"
+              className="w-3.5 h-3.5 object-contain rounded shrink-0"
+            />
+            <span className="font-medium text-mainText">Botchain Mainnet</span>
           </div>
 
           {/* Network Switch Prompt if on Wrong Network */}
           {isWrongNetwork && (
             <button
-              onClick={() => switchChain({ chainId: botchainTestnet.id })}
+              onClick={() => switchChain({ chainId: botchainMainnet.id })}
               disabled={isSwitching}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-errorRed/15 text-errorRed border border-errorRed/30 text-xs font-medium hover:bg-errorRed/25 transition-colors"
             >
               <AlertCircle className="w-3.5 h-3.5" />
-              <span>{isSwitching ? "Switching..." : "Switch to Botchain"}</span>
+              <span>{isSwitching ? "Switching..." : "Switch to Botchain Mainnet"}</span>
             </button>
           )}
 
@@ -104,15 +138,13 @@ export function Navbar() {
                     </div>
 
                     <a
-                      href={`https://scan.bohr.life/address/${address}`}
+                      href={`https://scan.botchain.ai/address/${address}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full flex items-center justify-between px-3 py-2 text-xs text-secondaryText hover:text-mainText hover:bg-[#101820] rounded-lg transition-colors"
                     >
                       <span>View on Explorer</span>
-                      <svg className="w-3 h-3 text-secondaryText" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
+                      <ExternalLink className="w-3 h-3 text-secondaryText" />
                     </a>
 
                     <button

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { CONTRACT_ADDRESS, MED_QUEUE_ABI } from "@/config/contract";
-import { botchainTestnet } from "@/config/chain";
+import { botchainMainnet } from "@/config/chain";
 import {
   Users,
   Ticket,
@@ -15,7 +15,8 @@ import {
   ShieldAlert,
   Info,
   Calendar,
-  Sparkles
+  Sparkles,
+  Globe
 } from "lucide-react";
 
 export function QueueDashboard() {
@@ -26,7 +27,7 @@ export function QueueDashboard() {
   const isConfigured = Boolean(
     CONTRACT_ADDRESS && CONTRACT_ADDRESS.startsWith("0x") && CONTRACT_ADDRESS.length === 42
   );
-  const isWrongNetwork = isConnected && chainId !== botchainTestnet.id;
+  const isWrongNetwork = isConnected && chainId !== botchainMainnet.id;
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -114,7 +115,7 @@ export function QueueDashboard() {
       return;
     }
     if (isWrongNetwork) {
-      setErrorMessage("Please switch to Botchain Testnet (Chain ID 968).");
+      setErrorMessage("Please switch to Botchain Mainnet (Chain ID 677).");
       return;
     }
     if (!isConfigured) {
@@ -156,10 +157,10 @@ export function QueueDashboard() {
           <div className="text-sm space-y-1">
             <h4 className="font-medium text-mainText">Contract Address Not Configured</h4>
             <p className="text-secondaryText leading-relaxed">
-              To interact with the live blockchain, compile and deploy the smart contract to Botchain Testnet:
+              To interact with the live blockchain, compile and deploy the smart contract to Botchain Mainnet:
             </p>
             <div className="pt-2 font-mono text-xs bg-[#101820] p-2.5 rounded-lg border border-border text-tealAccent select-all overflow-x-auto">
-              npx hardhat run scripts/deploy.js --network botchainTestnet
+              npx hardhat run scripts/deploy.js --network botchainMainnet
             </div>
             <p className="text-secondaryText text-xs pt-1">
               Then paste the deployed address into <code className="text-mainText">NEXT_PUBLIC_CONTRACT_ADDRESS</code> in your <code className="text-mainText">.env.local</code> file and restart the development server.
@@ -176,12 +177,12 @@ export function QueueDashboard() {
             <div className="text-sm">
               <span className="font-medium text-mainText">Incorrect Network Detected</span>
               <p className="text-secondaryText text-xs">
-                MedQueue is deployed on Botchain Testnet (Chain ID 968).
+                MedQueue is deployed on Botchain Mainnet (Chain ID 677).
               </p>
             </div>
           </div>
           <button
-            onClick={() => switchChain({ chainId: botchainTestnet.id })}
+            onClick={() => switchChain({ chainId: botchainMainnet.id })}
             className="px-3 py-1.5 rounded-lg bg-errorRed text-[#101820] text-xs font-semibold hover:bg-opacity-90 transition-opacity shrink-0"
           >
             Switch Network
@@ -193,7 +194,7 @@ export function QueueDashboard() {
       <section className="text-center space-y-3 pt-4 sm:pt-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1B2730] border border-border text-xs text-tealAccent">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Botchain Testnet Demo</span>
+          <span>Botchain Mainnet</span>
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-mainText tracking-tight">
           Your Place in the Queue.
@@ -275,7 +276,7 @@ export function QueueDashboard() {
             Hospital Queue Registration
           </h2>
           <p className="text-xs sm:text-sm text-secondaryText mt-1">
-            Obtain your sequential queue position securely on the Botchain Testnet.
+            Obtain your sequential queue position securely on the Botchain Mainnet.
           </p>
         </div>
 
@@ -335,11 +336,11 @@ export function QueueDashboard() {
                 <Loader2 className="w-5 h-5 animate-spin shrink-0" />
                 <div>
                   <p className="font-medium">
-                    {isWritePending ? "Waiting for signature in wallet..." : "Confirming transaction on Botchain Testnet..."}
+                    {isWritePending ? "Waiting for signature in wallet..." : "Confirming transaction on Botchain Mainnet..."}
                   </p>
                   {txHash && (
                     <a
-                      href={`https://scan.bohr.life/tx/${txHash}`}
+                      href={`https://scan.botchain.ai/tx/${txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs underline inline-flex items-center gap-1 mt-0.5 hover:text-mainText"
@@ -386,7 +387,7 @@ export function QueueDashboard() {
 
               {isWrongNetwork && (
                 <span className="text-xs text-errorRed">
-                  Switch to Botchain Testnet to proceed.
+                  Switch to Botchain Mainnet to proceed.
                 </span>
               )}
             </div>
@@ -442,21 +443,84 @@ export function QueueDashboard() {
         </section>
       )}
 
-      {/* Verification & Network Details info card */}
-      <section className="rounded-xl border border-border/60 bg-[#1B2730]/60 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-secondaryText">
-        <div className="space-y-1">
-          <p className="font-medium text-mainText">Botchain Testnet Parameters</p>
-          <p>Chain ID: 968 • Currency: BOT • RPC: https://rpc.bohr.life</p>
+      {/* BOT Chain Ecosystem & Verification Card */}
+      <section className="rounded-2xl border border-border/80 bg-[#1B2730]/70 p-5 sm:p-6 space-y-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-border/60 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-[#101820] border border-tealAccent/30 flex items-center justify-center p-1.5 shadow-sm shrink-0 overflow-hidden">
+              <img
+                src="/botchain-logo.png"
+                alt="BOT Chain Logo"
+                className="w-full h-full object-contain rounded-lg"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="font-semibold text-mainText text-sm sm:text-base">
+                  BOT Chain Ecosystem
+                </h4>
+                <span className="px-2 py-0.5 rounded-full bg-tealAccent/15 text-tealAccent text-[11px] font-semibold border border-tealAccent/30">
+                  Mainnet
+                </span>
+              </div>
+              <p className="text-xs text-secondaryText mt-0.5">
+                Chain ID: 677 • Native Token: BOT • Total Supply: 150M
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            <a
+              href="https://botchain.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#101820] border border-border text-xs font-medium text-mainText hover:text-tealAccent hover:border-tealAccent/40 transition-colors"
+            >
+              <img
+                src="/botchain-logo.png"
+                alt="BOT Chain Logo"
+                className="w-3.5 h-3.5 object-contain rounded shrink-0"
+              />
+              <span>BOT Chain Website</span>
+              <ExternalLink className="w-3 h-3 text-secondaryText" />
+            </a>
+
+            <a
+              href="https://scan.botchain.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#101820] border border-border text-xs font-medium text-mainText hover:text-tealAccent hover:border-tealAccent/40 transition-colors"
+            >
+              <img
+                src="/botchain-logo.png"
+                alt="BOT Chain Logo"
+                className="w-3.5 h-3.5 object-contain rounded shrink-0"
+              />
+              <span>BOT Chain Explorer</span>
+              <ExternalLink className="w-3 h-3 text-secondaryText" />
+            </a>
+          </div>
         </div>
-        <a
-          href="https://scan.bohr.life"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-tealAccent hover:underline"
-        >
-          <span>Open Botchain Explorer</span>
-          <ExternalLink className="w-3.5 h-3.5" />
-        </a>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-secondaryText">
+          <div>
+            RPC Endpoint: <code className="text-mainText font-mono">https://rpc.botchain.ai</code>
+          </div>
+          {isConfigured && (
+            <div className="flex items-center gap-1.5">
+              <span>Deployed Contract:</span>
+              <a
+                href={`https://scan.botchain.ai/address/${CONTRACT_ADDRESS}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-tealAccent hover:underline font-mono inline-flex items-center gap-1"
+              >
+                <span>{CONTRACT_ADDRESS}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );

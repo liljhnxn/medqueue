@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "MedQueue — Hospital Queue Number Demo",
-  description: "A simple, lightweight hospital queue registration demo running on Botchain Testnet.",
+  description: "A simple, lightweight hospital queue registration demo running on Botchain Mainnet.",
   icons: {
     icon: "/icon.svg",
     shortcut: "/icon.svg",
