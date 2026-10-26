@@ -16,7 +16,9 @@ import {
   Info,
   Calendar,
   Sparkles,
-  Globe
+  Globe,
+  Copy,
+  Check
 } from "lucide-react";
 
 export function QueueDashboard() {
@@ -30,6 +32,15 @@ export function QueueDashboard() {
   const isWrongNetwork = isConnected && chainId !== botchainMainnet.id;
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [copiedAddress, setCopiedAddress] = useState(false);
+
+  const handleCopyAddress = () => {
+    if (CONTRACT_ADDRESS) {
+      navigator.clipboard.writeText(CONTRACT_ADDRESS);
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    }
+  };
 
   // Read total registrations
   const {
@@ -205,6 +216,49 @@ export function QueueDashboard() {
         <p className="text-xs text-secondaryText/80">
           Demo application — not for real hospital use.
         </p>
+
+        {/* Prominent Botchain Mainnet Contract Address Banner */}
+        <div className="pt-2">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-2.5 sm:gap-4 px-4 py-2.5 rounded-xl bg-[#1B2730] border border-tealAccent/30 shadow-md">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span className="text-xs text-secondaryText font-medium">Botchain Mainnet Contract:</span>
+              <code className="text-xs font-mono font-semibold text-tealAccent select-all break-all">
+                {CONTRACT_ADDRESS}
+              </code>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleCopyAddress}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#101820] border border-border hover:border-tealAccent/50 text-xs text-secondaryText hover:text-tealAccent transition-colors"
+                title="Copy Mainnet Contract Address"
+              >
+                {copiedAddress ? (
+                  <>
+                    <Check className="w-3 h-3 text-emerald-400" />
+                    <span className="text-emerald-400 font-medium">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3 h-3" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+              <a
+                href={`https://scan.botchain.ai/address/${CONTRACT_ADDRESS}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#101820] border border-border hover:border-tealAccent/50 text-xs text-secondaryText hover:text-tealAccent transition-colors"
+                title="View contract on Botchain Explorer"
+              >
+                <span>Explorer</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Queue Information Cards */}
@@ -507,7 +561,7 @@ export function QueueDashboard() {
             RPC Endpoint: <code className="text-mainText font-mono">https://rpc.botchain.ai</code>
           </div>
           {isConfigured && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <span>Deployed Contract:</span>
               <a
                 href={`https://scan.botchain.ai/address/${CONTRACT_ADDRESS}`}
@@ -515,9 +569,17 @@ export function QueueDashboard() {
                 rel="noopener noreferrer"
                 className="text-tealAccent hover:underline font-mono inline-flex items-center gap-1"
               >
-                <span>{CONTRACT_ADDRESS}</span>
-                <ExternalLink className="w-3 h-3" />
+                <span className="break-all">{CONTRACT_ADDRESS}</span>
+                <ExternalLink className="w-3 h-3 shrink-0" />
               </a>
+              <button
+                type="button"
+                onClick={handleCopyAddress}
+                className="hover:text-tealAccent text-secondaryText shrink-0"
+                title="Copy Contract Address"
+              >
+                {copiedAddress ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
             </div>
           )}
         </div>

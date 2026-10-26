@@ -1,8 +1,19 @@
-import React from "react";
-import { ExternalLink, ShieldCheck } from "lucide-react";
+"use client";
+
+import React, { useState } from "react";
+import { ExternalLink, ShieldCheck, Copy, Check } from "lucide-react";
 import { CONTRACT_ADDRESS } from "@/config/contract";
 
 export function Footer() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (CONTRACT_ADDRESS) {
+      navigator.clipboard.writeText(CONTRACT_ADDRESS);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
   return (
     <footer className="mt-auto w-full border-t border-border bg-[#101820] text-secondaryText">
       {/* Ecosystem Section */}
@@ -79,14 +90,27 @@ export function Footer() {
 
         <div className="flex flex-wrap items-center gap-4 text-secondaryText">
           {CONTRACT_ADDRESS && (
-            <a
-              href={`https://scan.botchain.ai/address/${CONTRACT_ADDRESS}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-tealAccent transition-colors font-mono"
-            >
-              Contract: {CONTRACT_ADDRESS.slice(0, 6)}...{CONTRACT_ADDRESS.slice(-4)}
-            </a>
+            <div className="inline-flex items-center gap-1.5 font-mono">
+              <span className="text-secondaryText">Mainnet Contract:</span>
+              <a
+                href={`https://scan.botchain.ai/address/${CONTRACT_ADDRESS}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-tealAccent hover:underline inline-flex items-center gap-1"
+                title="View Mainnet Contract on Botchain Explorer"
+              >
+                <span>{CONTRACT_ADDRESS.slice(0, 6)}...{CONTRACT_ADDRESS.slice(-4)}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="hover:text-mainText text-secondaryText ml-0.5"
+                title="Copy Mainnet Contract Address"
+              >
+                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+              </button>
+            </div>
           )}
           <span>•</span>
           <span className="inline-flex items-center gap-1 text-secondaryText">

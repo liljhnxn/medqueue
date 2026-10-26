@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from "wagmi";
 import { botchainMainnet } from "@/config/chain";
-import { Wallet, ChevronDown, LogOut, AlertCircle, ExternalLink } from "lucide-react";
+import { CONTRACT_ADDRESS } from "@/config/contract";
+import { Wallet, ChevronDown, LogOut, AlertCircle, ExternalLink, Copy, Check } from "lucide-react";
 
 export function Navbar() {
   const { address, isConnected } = useAccount();
@@ -12,6 +13,7 @@ export function Navbar() {
   const chainId = useChainId();
   const { switchChain, isPending: isSwitching } = useSwitchChain();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [copiedContract, setCopiedContract] = useState(false);
 
   const isWrongNetwork = isConnected && chainId !== botchainMainnet.id;
 
@@ -83,6 +85,34 @@ export function Navbar() {
               className="w-3.5 h-3.5 object-contain rounded shrink-0"
             />
             <span className="font-medium text-mainText">Botchain Mainnet</span>
+          </div>
+
+          {/* Mainnet Contract Address Badge */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1B2730] border border-tealAccent/30 text-xs text-secondaryText">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span className="text-secondaryText font-medium hidden sm:inline">Contract:</span>
+            <a
+              href={`https://scan.botchain.ai/address/${CONTRACT_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-tealAccent hover:underline font-mono inline-flex items-center gap-1"
+              title="View Mainnet Contract on Botchain Explorer"
+            >
+              <span>{CONTRACT_ADDRESS.slice(0, 6)}...{CONTRACT_ADDRESS.slice(-4)}</span>
+              <ExternalLink className="w-2.5 h-2.5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(CONTRACT_ADDRESS);
+                setCopiedContract(true);
+                setTimeout(() => setCopiedContract(false), 2000);
+              }}
+              className="hover:text-mainText text-secondaryText ml-0.5"
+              title="Copy Mainnet Contract Address"
+            >
+              {copiedContract ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+            </button>
           </div>
 
           {/* Network Switch Prompt if on Wrong Network */}
